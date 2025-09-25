@@ -7,16 +7,12 @@ on:
         description: 'Run the workflow now'
         required: true
         default: 'yes'
-        options:
-          - 'yes'
-          - 'no'
+        options: ['yes', 'no']
       dont_run:
         description: 'Do not run the workflow'
         required: false
         default: 'no'
-        options:
-          - 'no'
-          - 'yes'
+        options: ['yes', 'no']
   
 jobs:
   Basics:
@@ -48,3 +44,21 @@ jobs:
         run: pip install requests
       - name: Verify Requests Installation
         run: pip show requests
+  Access-Workflow-Variables:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Accessing Global Workflow Variables
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Event Name: ${{ github.event_name }}"
+          echo "SHA: ${{ github.sha }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Job: ${{ github.job }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Run Number: ${{ github.run_number }}"
+      - name: Display workflow inputs ⚙️
+        run: |
+          echo "Value for 'run_now': ${{ github.event.inputs.run_now }}"
+          echo "Value for 'dont_run': ${{ github.event.inputs.dont_run }}"
