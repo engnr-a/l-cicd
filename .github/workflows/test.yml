@@ -1,4 +1,5 @@
 name: Github Actions Workflow
+run-name: Manual run by @${{ github.actor }} (#${{ github.run_number }})
 #on: [push]
 on: 
   workflow_dispatch:
