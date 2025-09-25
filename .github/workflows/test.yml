@@ -1,21 +1,23 @@
 name: Github Actions Workflow
 on: [push]
 jobs:
-  Explore-Github-Actions:
+  Basics:
     runs-on: ubuntu-latest
-    steps: 
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - name: Try to run some basic terminal commands
+    steps:
+      - name: Triggered by
+        run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Say what OS
+        run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - name: Basic terminal commands
         run: ls -lah
       - name: Checkout the repository
         uses: actions/checkout@v5
+      - name:
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - name: List files in the repository
+      - name: List files in the repo
         run: |
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-  Test-That-Python-Is-Available:
+  Available Python Info:
     runs-on: ubuntu-latest
     steps:
       - name: Check Python Version
