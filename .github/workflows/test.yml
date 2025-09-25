@@ -15,3 +15,16 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+  Test-That-Python-Is-Available:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Python Version
+        run: python --version
+      - name: Check Pip Version
+        run: pip --version
+      - name: List Installed Packages
+        run: pip list
+      - name: Install Requests Package
+        run: pip install requests
+      - name: Verify Requests Installation
+        run: pip show requests
