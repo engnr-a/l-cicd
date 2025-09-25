@@ -1,5 +1,23 @@
 name: Github Actions Workflow
-on: [push]
+#on: [push]
+on: 
+  workflow_dispatch:
+    inputs:
+      run_now:
+        description: 'Run the workflow now'
+        required: true
+        default: 'yes'
+        options:
+          - 'yes'
+          - 'no'
+      dont_run:
+        description: 'Do not run the workflow'
+        required: false
+        default: 'no'
+        options:
+          - 'no'
+          - 'yes'
+  
 jobs:
   Basics:
     runs-on: ubuntu-latest
