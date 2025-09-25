@@ -36,6 +36,7 @@ jobs:
           ls ${{ github.workspace }}
 
   Available-Python-Info:
+    name: Current Python Info
     runs-on: ubuntu-latest
     needs: Basics
     steps:
@@ -51,6 +52,7 @@ jobs:
         run: pip show requests
 
   Access-Workflow-Variables:
+    name: Workflow Variables
     needs: Available-Python-Info
     runs-on: ubuntu-latest
     steps:
@@ -73,6 +75,7 @@ jobs:
   run-python-app:
     runs-on: ubuntu-latest
     needs: Access-Workflow-Variables
+    name: Run Python Code
     if: ${{ github.event.inputs.run_python == 'yes' }}
     steps:
       - name: Display Workflow Info
@@ -98,6 +101,7 @@ jobs:
 
   run-curl-command:
     runs-on: ubuntu-latest
+    name: Run Curl Command
     needs: Basics
     if: ${{ github.event.inputs.run_curl == 'yes' }}
     steps:
