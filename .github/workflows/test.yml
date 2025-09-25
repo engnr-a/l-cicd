@@ -7,10 +7,12 @@ on:
         description: 'Run the workflow now'
         required: true
         default: 'yes'
+        type: choice
         options: ['yes', 'no']
       dont_run:
         description: 'Do not run the workflow'
         required: false
+        type: choice
         default: 'no'
         options: ['yes', 'no']
   
