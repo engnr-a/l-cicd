@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       run_now:
-        description: 'Run the workflow now'
+        description: 'Run the python code workflow now'
         required: true
         default: 'yes'
         type: choice
@@ -35,6 +35,7 @@ jobs:
           ls ${{ github.workspace }}
   Available-Python-Info:
     runs-on: ubuntu-latest
+    needs: Basics
     steps:
       - name: Check Python Version
         run: python --version
@@ -47,6 +48,7 @@ jobs:
       - name: Verify Requests Installation
         run: pip show requests
   Access-Workflow-Variables:
+    needs: Available-Python-Info
     runs-on: ubuntu-latest
     steps:
       - name: Accessing Global Workflow Variables
@@ -64,3 +66,23 @@ jobs:
         run: |
           echo "Value for 'run_now': ${{ github.event.inputs.run_now }}"
           echo "Value for 'dont_run': ${{ github.event.inputs.dont_run }}"
+
+  Run-My-Code:
+    runs-on: ubuntu-latest
+    needs: Access-Workflow-Variables
+    if: ${{ github.event.inputs.run_now == 'yes' && github.event.inputs.dont_run != 'yes' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python and uv cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'uv' 
+
+      - name: Install dependencies with uv
+        run: uv pip install -r requirements.txt
+
+      - name: Run Python script
+        run: python main.py
