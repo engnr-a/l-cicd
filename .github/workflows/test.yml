@@ -9,8 +9,8 @@ on:
         default: 'yes'
         type: choice
         options: ['yes', 'no']
-      dont_run:
-        description: 'Do not run the workflow'
+      run_curl:
+        description: 'Run the curl command'
         required: false
         type: choice
         default: 'no'
@@ -70,7 +70,7 @@ jobs:
   Run-My-Code:
     runs-on: ubuntu-latest
     needs: Access-Workflow-Variables
-    if: ${{ github.event.inputs.run_now == 'yes' && github.event.inputs.dont_run != 'yes' }}
+    if: ${{ github.event.inputs.run_now == 'yes' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -78,7 +78,7 @@ jobs:
       - name: Set up Python and uv cache
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
           cache: 'uv' 
 
       - name: Install dependencies with uv
@@ -86,3 +86,12 @@ jobs:
 
       - name: Run Python script
         run: python main.py
+  Run-Curl-Command:
+    runs-on: ubuntu-latest
+    needs: Basics
+    if: ${{ github.event.inputs.run_curl == 'yes' }}
+    steps:
+      - name: Run curl on GitHub API
+        run: |
+          echo "Running a curl command..."
+          curl -I https://api.github.com
