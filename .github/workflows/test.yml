@@ -85,12 +85,19 @@ jobs:
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
       - name: Add uv to PATH
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Install dependencies with uv
-        run: uv pip install . --system
-      - name: List Installed Dependencies 📦
-        run: uv pip list
-      - name: Run Python script
-        run: python main.py
+      - name: Install dependencies into venv
+        run: |
+          source .venv/bin/activate
+          uv pip install .
+      - name: List Installed Dependencies from venv
+        run: |
+          source .venv/bin/activate
+          uv pip list
+
+      - name: Run Python script using venv
+        run: |
+          source .venv/bin/activate
+          python main.py
 
   Run-Curl-Command:
     runs-on: ubuntu-latest
