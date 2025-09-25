@@ -4,7 +4,7 @@ run-name: Manual run by @${{ github.actor }} (#${{ github.run_number }})
 on: 
   workflow_dispatch:
     inputs:
-      run_now:
+      run_python:
         description: 'Run the python code workflow now'
         required: true
         default: 'yes'
@@ -70,36 +70,41 @@ jobs:
           echo "Value for 'run_now': ${{ github.event.inputs.run_now }}"
           echo "Value for 'dont_run': ${{ github.event.inputs.dont_run }}"
 
-  Run-My-Code:
+  run-python-app:
     runs-on: ubuntu-latest
-    needs: Access-Workflow-Variables
-    if: ${{ github.event.inputs.run_now == 'yes' }}
+    if: ${{ github.event.inputs.run_python == 'yes' }}
     steps:
+      - name: Display Workflow Info
+        run: |
+          echo "🎉 Job triggered by @${{ github.actor }}"
+          echo "🐧 Running on a ${{ runner.os }} server hosted by GitHub!"
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Python and uv cache
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'uv'
+
       - name: Install uv ⚡️
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
       - name: Add uv to PATH
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-      - name: Install dependencies into venv
-        run: |
-          source .venv/bin/activate
-          uv pip install .
-      - name: List Installed Dependencies from venv
-        run: |
-          source .venv/bin/activate
-          uv pip list
 
-      - name: Run Python script using venv
-        run: |
-          source .venv/bin/activate
-          python main.py
+      - name: Install dependencies from pyproject.toml
+        run: uv pip install . --system
 
-  Run-Curl-Command:
+      - name: List Installed Dependencies 📦
+        run: uv pip list
+
+      - name: Run Python script
+        run: python main.py
+
+
+  run-curl-command:
     runs-on: ubuntu-latest
     needs: Basics
     if: ${{ github.event.inputs.run_curl == 'yes' }}
